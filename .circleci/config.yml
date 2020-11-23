@@ -69,9 +69,11 @@ workflows:
           requires:
             - plan-apply
       - apply:
+          context: aws-mns-int
           requires:
             - hold-apply
       - plan-destroy:
+          context: aws-mns-int
           requires:
             - apply
       - hold-destroy:
@@ -79,5 +81,6 @@ workflows:
           requires:
             - plan-destroy
       - destroy:
+          context: aws-mns-int
           requires:
             - hold-destroy
