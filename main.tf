@@ -185,7 +185,7 @@ data "aws_ami" "ubuntu-xenial" {
     name   = "name"
     values = ["ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-*"]
   }
-    owners      = ["self"]
+    owners      = ["235313193472"]
 }
 
 # end vpc.tf
