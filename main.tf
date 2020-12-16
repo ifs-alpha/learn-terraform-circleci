@@ -13,7 +13,7 @@ provider "aws" {
   region = var.region
 }
 
-data "aws_ami" "amazon_linux" {
+data "aws_ami" "amazon_ubuntu" {
   most_recent = true
   owners = ["amazon"]
   filter {
