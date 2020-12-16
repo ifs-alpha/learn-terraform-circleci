@@ -155,15 +155,28 @@ resource "aws_route_table_association" "My_VPC_association" {
 
 # Create an EC2 instance
 
-resource "aws_ami" "example" {
-  name                = "terraform-example"
-  virtualization_type = "hvm"
-  root_device_name    = "/dev/xvda"
+data "aws_ami" "ubuntu" {
+  most_recent = true
 
-  ebs_block_device {
-    device_name = "/dev/xvda"
-    #snapshot_id = "snap-xxxxxxxx"
-    volume_size = 8
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = ["099720109477"] # Canonical
+}
+
+resource "aws_instance" "web" {
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = "t3.micro"
+
+  tags = {
+    Name = "HelloWorld"
   }
 }
 # end vpc.tf
