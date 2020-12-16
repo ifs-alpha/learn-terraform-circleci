@@ -162,9 +162,9 @@ resource "aws_ami_copy" "ubuntu-xenial-encrypted-ami" {
   source_ami_region = var.region
   encrypted         = "true"
 
-  tags {
-    Name = "ubuntu-xenial-encrypted-ami"
-  }
+  # tags {
+  #   Name = "ubuntu-xenial-encrypted-ami"
+  # }
 }
 
 data "aws_ami" "encrypted-ami" {
@@ -185,7 +185,7 @@ data "aws_ami" "ubuntu-xenial" {
     name   = "name"
     values = ["ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-*"]
   }
-    owners      = ["099720109477"]
+    owners      = ["self"]
 }
 
 # end vpc.tf
