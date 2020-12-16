@@ -33,3 +33,15 @@ resource "aws_s3_bucket" "terraform_state" {
 output "s3_bucket_name" {
   value = aws_s3_bucket.terraform_state.bucket
 }
+
+
+# create the VPC
+resource "aws_vpc" "My_VPC_HBLT" {
+  cidr_block           = var.vpcCIDRblock
+  instance_tenancy     = var.instanceTenancy 
+  enable_dns_support   = var.dnsSupport 
+  enable_dns_hostnames = var.dnsHostNames
+tags = {
+    Name = "My VPC"
+}
+} # end resource
