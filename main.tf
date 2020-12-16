@@ -13,23 +13,6 @@ provider "aws" {
   region = var.region
 }
 
-data "aws_ami" "amazon_ubuntu" {
-  most_recent = true
-  owners = ["amazon"]
-  filter {
-    name = "name"
-    values = [
-      "ubuntu-xenial-encrypted",
-    ]
-  }
-  filter {
-    name = "owner-alias"
-
-    values = [
-      "amazon",
-    ]
-  }
-}
 
 # create the VPC
 resource "aws_vpc" "My_VPC" {
@@ -169,13 +152,38 @@ resource "aws_route_table_association" "My_VPC_association" {
   subnet_id      = aws_subnet.My_VPC_Subnet.id
   route_table_id = aws_route_table.My_VPC_route_table.id
 } # end resource
-# Create an EC2 instance
-resource "aws_instance" "web" {
-  ami           = data.aws_ami.ubuntu.id
-  instance_type = "t3.micro"
 
-  tags = {
-    Name = "HelloWorld"
+# Create an EC2 instance
+
+resource "aws_ami_copy" "ubuntu-xenial-encrypted-ami" {
+  name              = "ubuntu-xenial-encrypted-ami"
+  description       = "An encrypted root ami based off ${data.aws_ami.ubuntu-xenial.id}"
+  source_ami_id     = "${data.aws_ami.ubuntu-xenial.id}"
+  source_ami_region = var.region
+  encrypted         = "true"
+
+  tags {
+    Name = "ubuntu-xenial-encrypted-ami"
   }
 }
+
+data "aws_ami" "encrypted-ami" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["ubuntu-xenial-encrypted"]
+  }
+
+  owners = ["self"]
+}
+
+data "aws_ami" "ubuntu-xenial" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-*"]
+  }
+
 # end vpc.tf
