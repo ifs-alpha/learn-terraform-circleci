@@ -155,37 +155,15 @@ resource "aws_route_table_association" "My_VPC_association" {
 
 # Create an EC2 instance
 
-resource "aws_ami_copy" "ubuntu-xenial-encrypted-ami" {
-  name              = "ubuntu-xenial-encrypted-ami"
-  description       = "An encrypted root ami based off ${data.aws_ami.ubuntu-xenial.id}"
-  source_ami_id     = "${data.aws_ami.ubuntu-xenial.id}"
-  source_ami_region = var.region
-  encrypted         = "true"
+resource "aws_ami" "example" {
+  name                = "terraform-example"
+  virtualization_type = "hvm"
+  root_device_name    = "/dev/xvda"
 
-  # tags {
-  #   Name = "ubuntu-xenial-encrypted-ami"
-  # }
-}
-
-data "aws_ami" "encrypted-ami" {
-  most_recent = true
-
-  filter {
-    name   = "name"
-    values = ["ubuntu-xenial-encrypted"]
+  ebs_block_device {
+    device_name = "/dev/xvda"
+    #snapshot_id = "snap-xxxxxxxx"
+    volume_size = 8
   }
-
-  owners = ["self"]
 }
-
-data "aws_ami" "ubuntu-xenial" {
-  most_recent = true
-
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-*"]
-  }
-    owners      = ["235313193472"]
-}
-
 # end vpc.tf
